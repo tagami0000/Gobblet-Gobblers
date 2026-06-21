@@ -1,3 +1,4 @@
+import { PIECE_IMAGES } from '../config/pieceImages'
 import type { Piece, PieceSize } from '../types/game'
 
 export const SIZE_CLASS: Record<PieceSize, string> = {
@@ -19,17 +20,23 @@ interface Props {
 }
 
 export default function PieceCircle({ piece, selected, onClick, className = '' }: Props) {
+  const imageSrc = PIECE_IMAGES[`${piece.player}-${piece.size}`]
+
   return (
     <div
       onClick={onClick}
       className={`
-        rounded-full border-2 shadow-md transition-all duration-150 flex-shrink-0
+        rounded-full border-2 shadow-md transition-all duration-150 flex-shrink-0 overflow-hidden
         ${SIZE_CLASS[piece.size]}
-        ${PLAYER_COLOR[piece.player]}
+        ${imageSrc ? 'border-transparent bg-transparent' : PLAYER_COLOR[piece.player]}
         ${selected ? 'ring-4 ring-white ring-offset-2 ring-offset-slate-800 scale-110' : ''}
         ${onClick ? 'cursor-pointer hover:scale-105 hover:brightness-110' : ''}
         ${className}
       `}
-    />
+    >
+      {imageSrc && (
+        <img src={imageSrc} alt="" draggable={false} className="w-full h-full object-contain" />
+      )}
+    </div>
   )
 }
