@@ -19,7 +19,6 @@ export default function GameBoard({ board, selection, onClickCell, isValidTarget
             <BoardCell
               key={`${r}-${c}`}
               cell={cell}
-              selection={selection}
               isSelected={isSelected}
               isValidTarget={isValidTarget(r, c)}
               onClick={() => onClickCell(r, c)}

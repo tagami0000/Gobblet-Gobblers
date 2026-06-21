@@ -9,11 +9,12 @@ interface Props {
   reserves: Record<Player, Piece[]>
   selection: Selection | null
   currentPlayer: Player
+  winner: Player | null
   onSelectPiece: (piece: Piece) => void
 }
 
-export default function PlayerArea({ player, reserves, selection, currentPlayer, onSelectPiece }: Props) {
-  const isActive = player === currentPlayer
+export default function PlayerArea({ player, reserves, selection, currentPlayer, winner, onSelectPiece }: Props) {
+  const isActive = player === currentPlayer && winner === null
   const pieces = reserves[player]
 
   const bySize = (size: PieceSize) => pieces.filter(p => p.size === size)

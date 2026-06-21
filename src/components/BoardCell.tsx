@@ -1,10 +1,9 @@
 import { getTopPiece } from '../logic/gameLogic'
-import type { Cell, Selection } from '../types/game'
+import type { Cell } from '../types/game'
 import PieceCircle from './PieceCircle'
 
 interface Props {
   cell: Cell
-  selection: Selection | null
   isSelected: boolean
   isValidTarget: boolean
   onClick: () => void

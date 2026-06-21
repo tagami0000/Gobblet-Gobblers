@@ -121,7 +121,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       // ボードからコマを取り除く
       newBoard[selection.row][selection.col] = newBoard[selection.row][selection.col].slice(0, -1)
 
-      // 特殊ルール: 取り除いた結果、相手の3並びが露出した場合 → 相手の勝ち
+      // 特殊ルール: コマを取り除いた瞬間に誰かの3並びが露出した場合 → 即時勝利
       const revealWinner = checkWinner(newBoard)
       if (revealWinner) {
         return { ...state, board: newBoard, reserves: newReserves, selection: null, winner: revealWinner }

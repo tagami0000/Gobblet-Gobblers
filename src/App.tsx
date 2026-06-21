@@ -21,6 +21,7 @@ export default function App() {
           reserves={reserves}
           selection={selection}
           currentPlayer={currentPlayer}
+          winner={winner}
           onSelectPiece={selectReservePiece}
         />
 
@@ -36,6 +37,7 @@ export default function App() {
           reserves={reserves}
           selection={selection}
           currentPlayer={currentPlayer}
+          winner={winner}
           onSelectPiece={selectReservePiece}
         />
       </div>
