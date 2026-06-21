@@ -14,10 +14,13 @@ export type Selection =
   | { type: 'reserve'; piece: Piece }
   | { type: 'board'; piece: Piece; row: number; col: number }
 
+export type Coord = [number, number]
+
 export interface GameState {
   board: Board
   reserves: Record<Player, Piece[]>
   currentPlayer: Player
   selection: Selection | null
   winner: Player | null
+  winningLine: Coord[] | null
 }

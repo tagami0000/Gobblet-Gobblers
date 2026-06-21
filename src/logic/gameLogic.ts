@@ -1,4 +1,4 @@
-import type { Board, Cell, GameState, Piece, PieceSize, Player } from '../types/game'
+import type { Board, Cell, Coord, GameState, Piece, PieceSize, Player } from '../types/game'
 
 const SIZE_RANK: Record<PieceSize, number> = { small: 1, medium: 2, large: 3 }
 
@@ -23,6 +23,7 @@ export function createInitialState(): GameState {
     currentPlayer: 'player1',
     selection: null,
     winner: null,
+    winningLine: null,
   }
 }
 
@@ -35,7 +36,7 @@ export function canPlace(piece: Piece, cell: Cell): boolean {
   return top === null || SIZE_RANK[piece.size] > SIZE_RANK[top.size]
 }
 
-const WIN_LINES: [number, number][][] = [
+const WIN_LINES: Coord[][] = [
   [[0,0],[0,1],[0,2]],
   [[1,0],[1,1],[1,2]],
   [[2,0],[2,1],[2,2]],
@@ -46,7 +47,12 @@ const WIN_LINES: [number, number][][] = [
   [[0,2],[1,1],[2,0]],
 ]
 
-export function checkWinner(board: Board): Player | null {
+export interface WinResult {
+  player: Player
+  line: Coord[]
+}
+
+export function findWin(board: Board): WinResult | null {
   for (const line of WIN_LINES) {
     const tops = line.map(([r, c]) => getTopPiece(board[r][c]))
     if (
@@ -54,10 +60,14 @@ export function checkWinner(board: Board): Player | null {
       tops[0].player === tops[1].player &&
       tops[1].player === tops[2].player
     ) {
-      return tops[0].player
+      return { player: tops[0].player, line }
     }
   }
   return null
+}
+
+export function checkWinner(board: Board): Player | null {
+  return findWin(board)?.player ?? null
 }
 
 function cloneBoard(board: Board): Board {
@@ -122,23 +132,31 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       newBoard[selection.row][selection.col] = newBoard[selection.row][selection.col].slice(0, -1)
 
       // 特殊ルール: コマを取り除いた瞬間に誰かの3並びが露出した場合 → 即時勝利
-      const revealWinner = checkWinner(newBoard)
-      if (revealWinner) {
-        return { ...state, board: newBoard, reserves: newReserves, selection: null, winner: revealWinner }
+      const reveal = findWin(newBoard)
+      if (reveal) {
+        return {
+          ...state,
+          board: newBoard,
+          reserves: newReserves,
+          selection: null,
+          winner: reveal.player,
+          winningLine: reveal.line,
+        }
       }
     }
 
     // 配置
     newBoard[row][col] = [...newBoard[row][col], selection.piece]
-    const winner = checkWinner(newBoard)
+    const win = findWin(newBoard)
 
     return {
       ...state,
       board: newBoard,
       reserves: newReserves,
-      currentPlayer: winner ? state.currentPlayer : nextPlayer(state.currentPlayer),
+      currentPlayer: win ? state.currentPlayer : nextPlayer(state.currentPlayer),
       selection: null,
-      winner,
+      winner: win?.player ?? null,
+      winningLine: win?.line ?? null,
     }
   }
 
