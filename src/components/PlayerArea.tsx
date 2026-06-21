@@ -1,8 +1,20 @@
 import type { Piece, PieceSize, Player, Selection } from '../types/game'
-import PieceCircle, { SIZE_CLASS } from './PieceCircle'
+import PieceCircle from './PieceCircle'
 
 const SIZES: PieceSize[] = ['large', 'medium', 'small']
 const SIZE_LABEL: Record<PieceSize, string> = { large: '大', medium: '中', small: '小' }
+
+// 手持ちエリアではボード上(w-20など)より一回り小さく表示してカードに収める
+const RESERVE_OVERRIDE: Record<PieceSize, string> = {
+  large:  '!w-16 !h-16',
+  medium: '!w-12 !h-12',
+  small:  '!w-9 !h-9',
+}
+const RESERVE_SLOT: Record<PieceSize, string> = {
+  large:  'w-16 h-16',
+  medium: 'w-12 h-12',
+  small:  'w-9 h-9',
+}
 
 interface Theme {
   header: string
@@ -55,18 +67,18 @@ export default function PlayerArea({
   return (
     <div
       className={`
-        w-44 rounded-3xl bg-white/95 backdrop-blur overflow-hidden
+        w-52 rounded-3xl bg-white/95 backdrop-blur
         shadow-xl transition-all duration-300
         ${isActive ? `ring-4 ${theme.ring} ${theme.glow} shadow-2xl scale-[1.04]` : 'opacity-70'}
         ${isWinner ? `ring-4 ring-yellow-400 scale-105` : ''}
       `}
     >
-      {/* ヘッダー */}
-      <div className={`relative bg-gradient-to-r ${theme.header} px-4 py-3 flex items-center gap-2`}>
+      {/* ヘッダー（角丸は自前で。カードは overflow-hidden しないのでコマがはみ出しても切れない） */}
+      <div className={`relative rounded-t-3xl bg-gradient-to-r ${theme.header} px-4 py-3 flex items-center gap-2`}>
         <PieceCircle piece={avatarPiece} className="!w-7 !h-7" />
         <span className="font-display font-semibold text-white text-lg drop-shadow">{label}</span>
         {isActive && (
-          <span className="ml-auto flex h-2.5 w-2.5">
+          <span className="ml-auto relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-white opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />
           </span>
@@ -80,14 +92,14 @@ export default function PlayerArea({
       </div>
 
       {/* コマ置き場 */}
-      <div className="flex flex-col gap-3 px-4 pb-5">
+      <div className="flex flex-col gap-2 px-3 pt-1 pb-5">
         {SIZES.map(size => {
           const available = bySize(size)
           const used = 2 - available.length
           return (
-            <div key={size} className="flex items-center gap-2">
-              <span className="text-orange-800/70 text-xs font-bold w-4 text-center">{SIZE_LABEL[size]}</span>
-              <div className="flex items-center justify-center gap-2 flex-1 min-h-[5rem]">
+            <div key={size} className="flex flex-col items-center gap-1">
+              <span className="text-orange-800/60 text-[11px] font-bold">{SIZE_LABEL[size]}</span>
+              <div className="flex items-center justify-center gap-3 min-h-[4.5rem]">
                 {available.map(piece => {
                   const isSelected =
                     selection?.type === 'reserve' && selection.piece.id === piece.id
@@ -97,13 +109,14 @@ export default function PlayerArea({
                       piece={piece}
                       selected={isSelected}
                       onClick={isActive ? () => onSelectPiece(piece) : undefined}
+                      className={RESERVE_OVERRIDE[size]}
                     />
                   )
                 })}
                 {Array.from({ length: used }).map((_, i) => (
                   <div
                     key={i}
-                    className={`rounded-full border-2 border-dashed border-orange-200 opacity-40 flex-shrink-0 ${SIZE_CLASS[size]}`}
+                    className={`rounded-full border-2 border-dashed border-orange-200 opacity-40 flex-shrink-0 ${RESERVE_SLOT[size]}`}
                   />
                 ))}
               </div>
