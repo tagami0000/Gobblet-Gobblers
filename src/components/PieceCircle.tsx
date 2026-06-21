@@ -1,0 +1,35 @@
+import type { Piece, PieceSize } from '../types/game'
+
+export const SIZE_CLASS: Record<PieceSize, string> = {
+  large:  'w-20 h-20',
+  medium: 'w-13 h-13',
+  small:  'w-8 h-8',
+}
+
+const PLAYER_COLOR = {
+  player1: 'bg-amber-400 border-amber-600 shadow-amber-300/50',
+  player2: 'bg-sky-400 border-sky-600 shadow-sky-300/50',
+}
+
+interface Props {
+  piece: Piece
+  selected?: boolean
+  onClick?: () => void
+  className?: string
+}
+
+export default function PieceCircle({ piece, selected, onClick, className = '' }: Props) {
+  return (
+    <div
+      onClick={onClick}
+      className={`
+        rounded-full border-2 shadow-md transition-all duration-150 flex-shrink-0
+        ${SIZE_CLASS[piece.size]}
+        ${PLAYER_COLOR[piece.player]}
+        ${selected ? 'ring-4 ring-white ring-offset-2 ring-offset-slate-800 scale-110' : ''}
+        ${onClick ? 'cursor-pointer hover:scale-105 hover:brightness-110' : ''}
+        ${className}
+      `}
+    />
+  )
+}
