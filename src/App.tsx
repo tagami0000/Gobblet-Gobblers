@@ -8,8 +8,8 @@ export default function App() {
   const { board, reserves, currentPlayer, selection, winner } = state
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-white text-4xl font-bold tracking-widest select-none">
+    <div className="min-h-screen bg-gradient-to-br from-amber-200 via-orange-100 to-yellow-200 flex flex-col items-center justify-center gap-6 p-8">
+      <h1 className="text-orange-900 text-5xl font-extrabold tracking-widest drop-shadow-md select-none">
         Gobblet Gobblers
       </h1>
 
@@ -44,7 +44,7 @@ export default function App() {
 
       <button
         onClick={reset}
-        className="px-8 py-3 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 text-white rounded-lg transition-colors font-medium text-sm tracking-wide select-none"
+        className="px-8 py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-full shadow-lg transition-all font-bold text-sm tracking-wide select-none hover:shadow-xl"
       >
         リセット
       </button>

@@ -10,7 +10,7 @@ interface Props {
 
 export default function GameBoard({ board, selection, onClickCell, isValidTarget }: Props) {
   return (
-    <div className="grid grid-cols-3 gap-1 bg-slate-600 p-1 rounded-xl shadow-2xl">
+    <div className="grid grid-cols-3 gap-2 bg-orange-800 p-2 rounded-2xl shadow-2xl">
       {board.map((row, r) =>
         row.map((cell, c) => {
           const isSelected =

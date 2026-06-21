@@ -12,23 +12,23 @@ interface Props {
 export default function BoardCell({ cell, isSelected, isValidTarget, onClick }: Props) {
   const top = getTopPiece(cell)
 
-  let borderClass = 'border-slate-600'
-  let bgClass = 'bg-slate-700'
+  let borderClass = 'border-orange-200'
+  let bgClass = 'bg-amber-50'
 
   if (isSelected) {
-    borderClass = 'border-white'
-    bgClass = 'bg-white/10'
+    borderClass = 'border-orange-500'
+    bgClass = 'bg-white'
   } else if (isValidTarget) {
     borderClass = 'border-green-400'
-    bgClass = 'bg-green-900/30'
+    bgClass = 'bg-green-100'
   }
 
   return (
     <div
       onClick={onClick}
       className={`
-        w-32 h-32 flex items-center justify-center border-2 cursor-pointer
-        transition-all duration-150 hover:brightness-110
+        w-32 h-32 flex items-center justify-center border-2 rounded-xl cursor-pointer
+        transition-all duration-150 hover:brightness-95
         ${borderClass} ${bgClass}
       `}
     >

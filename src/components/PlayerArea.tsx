@@ -20,21 +20,22 @@ export default function PlayerArea({ player, reserves, selection, currentPlayer,
   const bySize = (size: PieceSize) => pieces.filter(p => p.size === size)
 
   const PLAYER_LABEL = player === 'player1' ? 'Player 1' : 'Player 2'
-  const ACCENT = player === 'player1' ? 'text-amber-400' : 'text-sky-400'
-  const RING = player === 'player1' ? 'ring-amber-400' : 'ring-sky-400'
+  const ACCENT      = player === 'player1' ? 'text-amber-600'  : 'text-sky-600'
+  const BORDER_TOP  = player === 'player1' ? 'border-amber-400' : 'border-sky-400'
+  const RING        = player === 'player1' ? 'ring-amber-400'   : 'ring-sky-400'
 
   return (
     <div
       className={`
-        flex flex-col gap-5 px-6 py-5 rounded-xl bg-slate-800 w-40
-        transition-all duration-200
-        ${isActive ? `ring-2 ${RING}` : 'opacity-60'}
+        flex flex-col gap-5 px-6 py-5 rounded-2xl bg-white w-40 shadow-lg
+        border-t-4 ${BORDER_TOP} transition-all duration-200
+        ${isActive ? `ring-2 ${RING} shadow-xl` : 'opacity-70'}
       `}
     >
       <div className="text-center">
-        <div className={`font-bold text-lg ${ACCENT}`}>{PLAYER_LABEL}</div>
+        <div className={`font-extrabold text-lg ${ACCENT}`}>{PLAYER_LABEL}</div>
         {isActive && (
-          <div className="text-xs text-green-400 mt-1">Your turn</div>
+          <div className="text-xs text-green-600 font-semibold mt-1">Your turn</div>
         )}
       </div>
 
@@ -45,7 +46,7 @@ export default function PlayerArea({ player, reserves, selection, currentPlayer,
 
           return (
             <div key={size} className="flex flex-col gap-1">
-              <span className="text-slate-400 text-xs text-center">{SIZE_LABEL[size]}</span>
+              <span className="text-orange-800 text-xs text-center font-semibold">{SIZE_LABEL[size]}</span>
               <div className="flex justify-center gap-2 flex-wrap">
                 {available.map(piece => {
                   const isSelected =
@@ -63,7 +64,7 @@ export default function PlayerArea({ player, reserves, selection, currentPlayer,
                   <div
                     key={i}
                     className={`
-                      rounded-full border-2 border-dashed border-slate-600 opacity-30 flex-shrink-0
+                      rounded-full border-2 border-dashed border-orange-200 opacity-40 flex-shrink-0
                       ${SIZE_CLASS[size]}
                     `}
                   />
